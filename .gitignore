@@ -1,0 +1,5 @@
+/node_modules/
+/public/theme/
+*.log
+mongodb
+.env

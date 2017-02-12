@@ -4,9 +4,20 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var mongoose = require('mongoose');
+require('dotenv').config();
 
 var index = require('./routes/index');
-var users = require('./routes/users');
+var api = require('./routes/api');
+
+mongoose.connect(process.env.DB_URI, function(err, res) {
+	if (err) {
+		console.log('DB CONNECTION FAIL');
+
+	} else {
+		console.log('DB CONNECTION SUCCESS');
+	}
+});
 
 var app = express();
 
@@ -23,7 +34,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
-app.use('/users', users);
+app.use('/api', api);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
