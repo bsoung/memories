@@ -32678,7 +32678,19 @@ var Posts = function (_Component) {
 	}, {
 		key: 'componentDidUpdate',
 		value: function componentDidUpdate() {
-			console.log('componentDidUpdate');
+			if (this.props.posts.list == null) {
+				this.props.fetchPosts(null);
+			}
+		}
+	}, {
+		key: 'submitPost',
+		value: function submitPost(post) {
+			var currentLocation = this.props.posts.currentLocation;
+
+			// latitude, longitude - mongo requirement for geospatial queries
+			post['geo'] = [currentLocation.lat, currentLocation.lng];
+
+			console.log('submit post', JSON.stringify(post));
 		}
 	}, {
 		key: 'render',
@@ -32688,7 +32700,7 @@ var Posts = function (_Component) {
 			return _react2.default.createElement(
 				'div',
 				null,
-				_react2.default.createElement(_view.CreatePost, null),
+				_react2.default.createElement(_view.CreatePost, { onCreate: this.submitPost.bind(this) }),
 				_react2.default.createElement(
 					'ol',
 					null,
@@ -32810,10 +32822,40 @@ var CreatePost = function (_Component) {
 	function CreatePost() {
 		_classCallCheck(this, CreatePost);
 
-		return _possibleConstructorReturn(this, (CreatePost.__proto__ || Object.getPrototypeOf(CreatePost)).apply(this, arguments));
+		var _this = _possibleConstructorReturn(this, (CreatePost.__proto__ || Object.getPrototypeOf(CreatePost)).call(this));
+
+		_this.state = {
+			post: {
+				image: '',
+				caption: ''
+			}
+		};
+		return _this;
 	}
 
 	_createClass(CreatePost, [{
+		key: 'updatePost',
+		value: function updatePost(e) {
+			e.preventDefault();
+
+			var updated = Object.assign({}, this.state.post);
+			updated[e.target.id] = e.target.value;
+
+			this.setState({
+				post: updated
+			});
+		}
+	}, {
+		key: 'submitPost',
+		value: function submitPost(e) {
+			e.preventDefault();
+			console.log('Submit post', JSON.stringify(this.state.post));
+
+			var updated = Object.assign({}, this.state.post);
+
+			this.props.onCreate(updated);
+		}
+	}, {
 		key: 'render',
 		value: function render() {
 			return _react2.default.createElement(
@@ -32828,6 +32870,12 @@ var CreatePost = function (_Component) {
 						null,
 						'Upload Image'
 					)
+				),
+				_react2.default.createElement('input', { id: 'caption', onChange: this.updatePost.bind(this), type: 'text', placeholder: 'Caption' }),
+				_react2.default.createElement(
+					'button',
+					{ onClick: this.submitPost.bind(this) },
+					'Submit'
 				)
 			);
 		}
@@ -32979,6 +33027,7 @@ exports.default = function () {
 		case _constants2.default.CURRENT_LOCATION_CHANGED:
 
 			updated.currentLocation = action.location;
+			updated.list = null;
 
 			return updated;
 

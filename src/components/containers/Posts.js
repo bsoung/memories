@@ -11,7 +11,21 @@ class Posts extends Component {
 	}
 
 	componentDidUpdate() {
-		console.log('componentDidUpdate');
+		if (this.props.posts.list == null) {
+			this.props.fetchPosts(null);
+		}
+	}
+
+	submitPost(post) {
+		const currentLocation = this.props.posts.currentLocation;
+
+		// latitude, longitude - mongo requirement for geospatial queries
+		post['geo'] = [
+			currentLocation.lat,
+			currentLocation.lng
+		];
+
+		console.log('submit post', JSON.stringify(post));
 	}
 
 	render() {
@@ -19,7 +33,7 @@ class Posts extends Component {
 
 		return (
 			<div>
-				<CreatePost />
+				<CreatePost onCreate={this.submitPost.bind(this)} />
 
 				<ol>
 					{

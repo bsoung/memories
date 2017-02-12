@@ -22,7 +22,8 @@ export default (state=initialState, action) => {
 		case constants.CURRENT_LOCATION_CHANGED:
 
 			updated.currentLocation = action.location;
-
+			updated.list = null;
+			
 			return updated;
 
 		default:
