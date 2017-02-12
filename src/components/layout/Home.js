@@ -1,5 +1,6 @@
 import React from 'react';
-import { Posts } from '../containers';
+import { Posts, MapNavigation } from '../containers';
+
 
 export default (props) => {
 		return (
@@ -7,7 +8,7 @@ export default (props) => {
 				<h1>Home layout</h1>
 				<div className="row">
 					<div className="col-md-3">
-						MAP
+						<MapNavigation />
 					</div>
 
 					<div className="col-md-6">

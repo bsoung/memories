@@ -7,7 +7,9 @@ class CreatePost extends Component {
 		return (
 			<div>
 				Create Post
-				<Dropzone />
+				<Dropzone style={{border: 'none'}}>
+					<button>Upload Image</button>
+				</Dropzone>
 			</div>
 		)
 	}
