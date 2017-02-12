@@ -26,7 +26,6 @@ const getRequest = (path, params, actionType) => {
 
 const postRequest = (path, params, actionType) => {
 	return (dispatch) => 
-		// returns a promise
 		APIManager
 		.post(path, params)
 		.then(response => {
@@ -53,6 +52,13 @@ export default {
 			return dispatch(getRequest('/api/post/', params, constants.FETCH_POSTS));
 		}
 	},
+
+	updateCurrentLocation: (location) => {
+		return {
+			type: constants.CURRENT_LOCATION_CHANGED,
+			location: location
+		}
+	}
 
 
 }

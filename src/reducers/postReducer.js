@@ -1,8 +1,11 @@
 import constants from '../constants';
 
 let initialState = {
-	
-	list: []
+	currentLocation: {
+		lat: 40.7504753,
+		lng: -73.9932668
+	},
+	list: null
 }
 
 export default (state=initialState, action) => {
@@ -11,11 +14,14 @@ export default (state=initialState, action) => {
 
 	switch (action.type) {
 		case constants.FETCH_POSTS:
-			// console.log('FETCH_POSTS:', JSON.stringify(action.payload));
 
-			updated['list'] = action.payload
+			updated.list = action.payload;
 
-			console.log(updated);
+			return updated;
+
+		case constants.CURRENT_LOCATION_CHANGED:
+
+			updated.currentLocation = action.location;
 
 			return updated;
 

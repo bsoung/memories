@@ -5,16 +5,20 @@ import actions from '../../actions';
 import { Map } from '../view';
 
 class Posts extends Component {
+	setNewLocation(location) {
+		// console.log('setNewLocation', JSON.stringify(location));
+
+		this.props.updateCurrentLocation(location);
+	}
 
 	render() {
-		const center = {
-			lat: 40.7504753,
-			lng: -73.9932668
-		}
-
 		return (
 			<div>
-				<Map center={center} zoom={14} />
+				<Map 
+					center={this.props.posts.currentLocation} 
+					zoom={14} 
+					mapMoved={this.setNewLocation.bind(this)}
+				/>
 			</div>
 		)
 	}
@@ -23,14 +27,14 @@ class Posts extends Component {
 const mapStateToProps = (state) => {
 
 	return {
-
+		posts: state.post
 	}
 }
 
 const mapDispatchToProps = (dispatch) => {
 	
 	return {
-
+		updateCurrentLocation: (location) => dispatch(actions.updateCurrentLocation(location))
 	}
 }
 

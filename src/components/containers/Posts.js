@@ -10,20 +10,27 @@ class Posts extends Component {
 		this.props.fetchPosts(null);
 	}
 
+	componentDidUpdate() {
+		console.log('componentDidUpdate');
+	}
+
 	render() {
-		const list = this.props.posts.list.map(p => {
-			return (
-				<li key={p.id}>{p.caption}</li>
-			)
-		});
+		const list = this.props.posts.list; // can be null
 
 		return (
 			<div>
 				<CreatePost />
 
-				Posts
 				<ol>
-					{ list }
+					{
+						(list == null) 
+						? null 
+						: list.map(p => {
+							return (
+								<li key={p.id}>{p.caption}</li>
+							)
+						})
+					}
 				</ol>
 				
 			</div>
