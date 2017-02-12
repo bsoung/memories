@@ -1,16 +1,18 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { Posts } from './components/containers'; 
+import { Home } from './components/layout'; 
+import store from './stores';
+import { Provider } from 'react-redux';
 
-class App extends Component {
-	render() {
-		return (
-			<div>
-				React entry point
-				<Posts />
-			</div>
-		)
-	}
-}
+const app = (
 
-ReactDOM.render(<App />, document.getElementById('root'));
+	<Provider store={ store.configureStore() }>
+		<div>
+			<Home />
+		</div>
+	</Provider>
+
+)
+
+ReactDOM.render(app, document.getElementById('root'));

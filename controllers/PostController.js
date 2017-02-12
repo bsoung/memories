@@ -10,7 +10,19 @@ module.exports = {
 					return;
 				}
 
-				resolve(posts);
+				if (isRaw) {
+					resolve(posts);
+
+				} else {
+					var list = [];
+
+					posts.forEach(function(post) {
+						list.push(post.summary());
+					});
+
+					resolve(list);
+				}
+				
 			});
 		});
 	},
@@ -23,7 +35,17 @@ module.exports = {
 					return;
 				}
 
-				resolve(post);
+				if (post == null) {
+					reject(new Error(err));
+					return;
+				}
+
+				if (isRaw) {
+					resolve(post);
+				} else {
+					resolve(post.summary());
+				}
+
 			});
 		});
 	},
@@ -36,7 +58,12 @@ module.exports = {
 					return;
 				}
 
-				resolve(post);
+				if (isRaw) {
+					resolve(post);
+				} else {
+					resolve(post.summary());
+				}
+
 			});
 		});
 	}

@@ -10,7 +10,19 @@ module.exports = {
 					return;
 				}
 
-				resolve(comments);
+				if (isRaw) {
+					resolve(comments);
+
+				} else {
+					var list = [];
+
+					comments.forEach(function(comment){
+						list.push(comment.summary());
+					});
+
+					resolve(list);
+				}
+
 			});
 		});
 	},
@@ -23,7 +35,18 @@ module.exports = {
 					return;
 				}
 
-				resolve(comment);
+				if (comment == null) {
+					reject(new Error(err));
+					return;
+				}
+
+				if (isRaw) {
+					resolve(comment);
+
+				} else {
+					resolve(comment.summary());
+				}
+
 			});
 		});
 	},
@@ -36,7 +59,13 @@ module.exports = {
 					return;
 				}
 
-				resolve(comment);
+				if (isRaw) {
+					resolve(comment);
+
+				} else {
+					resolve(comment.summary());
+				}
+
 			});
 		});
 	}
