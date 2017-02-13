@@ -19,11 +19,16 @@ export default (state=initialState, action) => {
 
 			return updated;
 
+		case constants.CREATE_POST:
+			console.log('CREATE_POST: ', JSON.stringify(action.payload));
+
+			return updated;
+
 		case constants.CURRENT_LOCATION_CHANGED:
 
 			updated.currentLocation = action.location;
 			updated.list = null;
-			
+
 			return updated;
 
 		default:

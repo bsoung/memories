@@ -47,9 +47,15 @@ const postRequest = (path, params, actionType) => {
 
 export default {
 
+	createPost: (params) => {
+		return (dispatch) => {
+			return dispatch(postRequest('/api/post', params, constants.CREATE_POST))
+		}
+	},
+
 	fetchPosts: (params) => {
 		return (dispatch) => {
-			return dispatch(getRequest('/api/post/', params, constants.FETCH_POSTS));
+			return dispatch(getRequest('/api/post/', params, constants.FETCH_POSTS))
 		}
 	},
 

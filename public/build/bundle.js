@@ -11494,6 +11494,12 @@ var postRequest = function postRequest(path, params, actionType) {
 
 exports.default = {
 
+	createPost: function createPost(params) {
+		return function (dispatch) {
+			return dispatch(postRequest('/api/post', params, _constants2.default.CREATE_POST));
+		};
+	},
+
 	fetchPosts: function fetchPosts(params) {
 		return function (dispatch) {
 			return dispatch(getRequest('/api/post/', params, _constants2.default.FETCH_POSTS));
@@ -11546,6 +11552,8 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = {
 	FETCH_POSTS: 'FETCH_POSTS',
+	CREATE_POST: 'CREATE_POST',
+
 	CURRENT_LOCATION_CHANGED: 'CURRENT_LOCATION_CHANGED'
 };
 
@@ -32690,7 +32698,9 @@ var Posts = function (_Component) {
 			// latitude, longitude - mongo requirement for geospatial queries
 			post['geo'] = [currentLocation.lat, currentLocation.lng];
 
-			console.log('submit post', JSON.stringify(post));
+			this.props.createPost(post);
+
+			// console.log('submit post', JSON.stringify(post));
 		}
 	}, {
 		key: 'render',
@@ -32731,6 +32741,9 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 	return {
 		fetchPosts: function fetchPosts(params) {
 			return dispatch(_actions2.default.fetchPosts(params));
+		},
+		createPost: function createPost(params) {
+			return dispatch(_actions2.default.createPost(params));
 		}
 	};
 };
@@ -33024,6 +33037,11 @@ exports.default = function () {
 
 			return updated;
 
+		case _constants2.default.CREATE_POST:
+			console.log('CREATE_POST: ', JSON.stringify(action.payload));
+
+			return updated;
+
 		case _constants2.default.CURRENT_LOCATION_CHANGED:
 
 			updated.currentLocation = action.location;
@@ -33056,8 +33074,20 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 exports.default = {
 	get: function get(url, params) {
 		return new Promise(function (resolve, reject) {
-
 			_superagent2.default.get(url).query(params).set('Accept', "application/json").end(function (err, response) {
+				if (err) {
+					reject(err);
+					return;
+				}
+
+				resolve(response.body);
+			});
+		});
+	},
+
+	post: function post(url, params) {
+		return new Promise(function (resolve, reject) {
+			_superagent2.default.post(url).send(params).set('Accept', "application/json").end(function (err, response) {
 				if (err) {
 					reject(err);
 					return;
