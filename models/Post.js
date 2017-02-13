@@ -16,10 +16,7 @@ PostSchema.methods.summary = function() {
 		profile: this.profile,
 		image: this.image,
 		caption: this.caption,
-		geo: {
-			type: [Number],
-			index: '2d'
-		},
+		geo: this.geo,
 		timestamp: this.timestamp,
 		id: this._id.toString()
 	}

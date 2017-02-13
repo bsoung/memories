@@ -4,34 +4,70 @@ export default {
 	get: (url, params) => {
 		return new Promise((resolve, reject) => {
 			superagent
-			.get(url)
-			.query(params)
-			.set('Accept', "application/json")
-			.end((err, response) => {
-				if (err) {
-					reject(err);
-					return;
-				}
+				.get(url)
+				.query(params)
+				.set('Accept', "application/json")
+				.end((err, response) => {
+					if (err) {
+						reject(err);
+						return;
+					}
 
-				resolve(response.body);
-			});
+					resolve(response.body);
+				});
 		});
 	},
 
 	post: (url, params) => {
 		return new Promise((resolve, reject) => {
 			superagent
-			.post(url)
-			.send(params)
-			.set('Accept', "application/json")
-			.end((err, response) => {
+				.post(url)
+				.send(params)
+				.set('Accept', "application/json")
+				.end((err, response) => {
+					if (err) {
+						reject(err);
+						return;
+					}
+
+					resolve(response.body);
+				});
+		});
+	},
+
+	uploadFile: (url, file, params) => {
+		return new Promise((resolve, reject) => {
+			let uploadRequest = superagent.post(url);
+			uploadRequest.attach('file', file);
+
+			if (params) {
+					Object.keys(params).forEach(key => {
+					uploadRequest.field(key, params[key]);
+				});
+			}
+
+			uploadRequest.end((err, response) => {
 				if (err) {
 					reject(err);
 					return;
 				}
 
-				resolve(response.body);
+				const uploaded = response.body;	
+				console.log('UPLOAD COMPLETE: ', JSON.stringify(uploaded));
+
+				resolve(uploaded);
 			});
+		
 		});
 	}
 }
+
+
+
+
+
+
+
+
+
+

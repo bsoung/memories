@@ -9,6 +9,7 @@ require('dotenv').config();
 
 var index = require('./routes/index');
 var api = require('./routes/api');
+var account = require('./routes/account');
 
 mongoose.connect(process.env.DB_URI, function(err, res) {
 	if (err) {
@@ -33,8 +34,11 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+
 app.use('/api', api);
+app.use('/account', account);
 app.use('/*', index);
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
