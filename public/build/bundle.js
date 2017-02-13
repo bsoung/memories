@@ -11460,7 +11460,7 @@ var getRequest = function getRequest(path, params, actionType) {
 		return (
 			// returns a promise
 			_utils.APIManager.get(path, params).then(function (response) {
-				console.log("GET response", JSON.stringify(response));
+				// console.log("GET response", JSON.stringify(response));
 				var payload = response.results || response.result || response.message;
 
 				dispatch({
@@ -11491,6 +11491,7 @@ var postRequest = function postRequest(path, params, actionType) {
 
 			return response;
 		}).catch(function (err) {
+			console.log("error here?");
 			console.log(err.message);
 			throw err;
 		});
@@ -11498,6 +11499,12 @@ var postRequest = function postRequest(path, params, actionType) {
 };
 
 exports.default = {
+
+	signup: function signup(params) {
+		return function (dispatch) {
+			return dispatch(postRequest('/account/register', params, _constants2.default.CURRENT_USER_RECEIVED));
+		};
+	},
 
 	createPost: function createPost(params) {
 		return function (dispatch) {
@@ -11530,7 +11537,7 @@ exports.default = {
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
-exports.Map = exports.CreatePost = undefined;
+exports.Register = exports.Map = exports.CreatePost = undefined;
 
 var _CreatePost = __webpack_require__(282);
 
@@ -11540,10 +11547,15 @@ var _Map = __webpack_require__(283);
 
 var _Map2 = _interopRequireDefault(_Map);
 
+var _Register = __webpack_require__(297);
+
+var _Register2 = _interopRequireDefault(_Register);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.CreatePost = _CreatePost2.default;
 exports.Map = _Map2.default;
+exports.Register = _Register2.default;
 
 /***/ }),
 /* 111 */
@@ -11559,6 +11571,7 @@ exports.default = {
 	FETCH_POSTS: 'FETCH_POSTS',
 	CREATE_POST: 'CREATE_POST',
 
+	CURRENT_USER_RECEIVED: 'CURRENT_USER_RECEIVED',
 	CURRENT_LOCATION_CHANGED: 'CURRENT_LOCATION_CHANGED'
 };
 
@@ -33048,15 +33061,20 @@ exports.default = Map;
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
-exports.postReducer = undefined;
+exports.accountReducer = exports.postReducer = undefined;
 
 var _postReducer = __webpack_require__(285);
 
 var _postReducer2 = _interopRequireDefault(_postReducer);
 
+var _accountReducer = __webpack_require__(298);
+
+var _accountReducer2 = _interopRequireDefault(_accountReducer);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.postReducer = _postReducer2.default;
+exports.accountReducer = _accountReducer2.default;
 
 /***/ }),
 /* 285 */
@@ -35436,6 +35454,8 @@ var _actions = __webpack_require__(109);
 
 var _actions2 = _interopRequireDefault(_actions);
 
+var _view = __webpack_require__(110);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -35454,12 +35474,20 @@ var Account = function (_Component) {
 	}
 
 	_createClass(Account, [{
+		key: 'register',
+		value: function register(registration) {
+			console.log('REGISTER', JSON.stringify(registration));
+
+			this.props.signup(registration);
+		}
+	}, {
 		key: 'render',
 		value: function render() {
 			return _react2.default.createElement(
 				'div',
 				null,
-				'Account Container'
+				'Account Container',
+				_react2.default.createElement(_view.Register, { onRegister: this.register.bind(this) })
 			);
 		}
 	}]);
@@ -35474,10 +35502,153 @@ var mapStateToProps = function mapStateToProps(state) {
 
 var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 
-	return {};
+	return {
+		signup: function signup(params) {
+			return dispatch(_actions2.default.signup(params));
+		}
+	};
 };
 
 exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(Account);
+
+/***/ }),
+/* 297 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(3);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Register = function (_Component) {
+	_inherits(Register, _Component);
+
+	function Register() {
+		_classCallCheck(this, Register);
+
+		var _this = _possibleConstructorReturn(this, (Register.__proto__ || Object.getPrototypeOf(Register)).call(this));
+
+		_this.state = {
+			registration: {
+				username: '',
+				password: ''
+			}
+		};
+		return _this;
+	}
+
+	_createClass(Register, [{
+		key: 'updateRegistration',
+		value: function updateRegistration(e) {
+			var updated = Object.assign({}, this.state.registration);
+
+			updated[e.target.id] = e.target.value;
+
+			this.setState({
+				registration: updated
+			});
+		}
+	}, {
+		key: 'submitRegistration',
+		value: function submitRegistration(e) {
+			e.preventDefault();
+
+			var registration = this.state.registration;
+
+			if (registration.username.length == 0) {
+				alert('Please enter a username');
+				return;
+			}
+
+			if (registration.password.length == 0) {
+				alert('Please enter a password');
+				return;
+			}
+
+			this.props.onRegister(this.state.registration);
+		}
+	}, {
+		key: 'render',
+		value: function render() {
+			return _react2.default.createElement(
+				'div',
+				null,
+				_react2.default.createElement(
+					'h2',
+					null,
+					'Sign up'
+				),
+				_react2.default.createElement('input', { onChange: this.updateRegistration.bind(this), id: 'username', type: 'text', placeholder: 'Username' }),
+				_react2.default.createElement('br', null),
+				_react2.default.createElement('input', { onChange: this.updateRegistration.bind(this), id: 'password', type: 'password', placeholder: 'Password' }),
+				_react2.default.createElement('br', null),
+				_react2.default.createElement(
+					'button',
+					{ onClick: this.submitRegistration.bind(this) },
+					'Join'
+				)
+			);
+		}
+	}]);
+
+	return Register;
+}(_react.Component);
+
+exports.default = Register;
+
+/***/ }),
+/* 298 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _constants = __webpack_require__(111);
+
+var _constants2 = _interopRequireDefault(_constants);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var initialState = {
+	user: null
+};
+
+exports.default = function () {
+	var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;
+	var action = arguments[1];
+
+	var updated = Object.assign({}, state);
+
+	switch (action.type) {
+		case _constants2.default.CURRENT_USER_RECEIVED:
+			updated['user'] = action.user;
+
+			return updated;
+
+		default:
+			return updated;
+	}
+};
 
 /***/ })
 /******/ ]);
