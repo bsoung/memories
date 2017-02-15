@@ -7,8 +7,7 @@ const getRequest = (path, params, actionType) => {
 		APIManager
 		.get(path, params)
 		.then(response => {
-			// console.log("GET response", JSON.stringify(response));
-			const payload = response.results || response.result || response.message;
+			const payload = response.results || response.result || response.message || response.user;
 
 			dispatch({
 				type: actionType,
@@ -30,7 +29,7 @@ const postRequest = (path, params, actionType) => {
 		.post(path, params)
 		.then(response => {
 			console.log("POST response", JSON.stringify(response));
-			const payload = response.results || response.result || response.message;
+			const payload = response.results || response.result || response.message || response.profile || response.user;
 			
 			dispatch({
 				type: actionType,
@@ -40,7 +39,6 @@ const postRequest = (path, params, actionType) => {
 			return response;
 		})
 		.catch(err => {
-			console.log("error here?")
 			console.log(err.message);
 			throw err;
 		});
@@ -54,6 +52,12 @@ export default {
 		}
 	},
 
+	login: (params) => {
+		return (dispatch) => {
+			return dispatch(postRequest('/account/login', params, constants.CURRENT_USER_RECEIVED))
+		}
+	},
+
 	createPost: (params) => {
 		return (dispatch) => {
 			return dispatch(postRequest('/api/post', params, constants.CREATE_POST))
@@ -63,6 +67,12 @@ export default {
 	fetchPosts: (params) => {
 		return (dispatch) => {
 			return dispatch(getRequest('/api/post/', params, constants.FETCH_POSTS))
+		}
+	},
+
+	checkCurrentUser: (params) => {
+		return (dispatch) => {
+			return dispatch(getRequest('/account/currentuser/', null, constants.CURRENT_USER_RECEIVED))
 		}
 	},
 

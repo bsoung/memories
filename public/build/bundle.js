@@ -11460,8 +11460,7 @@ var getRequest = function getRequest(path, params, actionType) {
 		return (
 			// returns a promise
 			_utils.APIManager.get(path, params).then(function (response) {
-				// console.log("GET response", JSON.stringify(response));
-				var payload = response.results || response.result || response.message;
+				var payload = response.results || response.result || response.message || response.user;
 
 				dispatch({
 					type: actionType,
@@ -11482,7 +11481,7 @@ var postRequest = function postRequest(path, params, actionType) {
 	return function (dispatch) {
 		return _utils.APIManager.post(path, params).then(function (response) {
 			console.log("POST response", JSON.stringify(response));
-			var payload = response.results || response.result || response.message;
+			var payload = response.results || response.result || response.message || response.profile || response.user;
 
 			dispatch({
 				type: actionType,
@@ -11491,7 +11490,6 @@ var postRequest = function postRequest(path, params, actionType) {
 
 			return response;
 		}).catch(function (err) {
-			console.log("error here?");
 			console.log(err.message);
 			throw err;
 		});
@@ -11506,6 +11504,12 @@ exports.default = {
 		};
 	},
 
+	login: function login(params) {
+		return function (dispatch) {
+			return dispatch(postRequest('/account/login', params, _constants2.default.CURRENT_USER_RECEIVED));
+		};
+	},
+
 	createPost: function createPost(params) {
 		return function (dispatch) {
 			return dispatch(postRequest('/api/post', params, _constants2.default.CREATE_POST));
@@ -11515,6 +11519,12 @@ exports.default = {
 	fetchPosts: function fetchPosts(params) {
 		return function (dispatch) {
 			return dispatch(getRequest('/api/post/', params, _constants2.default.FETCH_POSTS));
+		};
+	},
+
+	checkCurrentUser: function checkCurrentUser(params) {
+		return function (dispatch) {
+			return dispatch(getRequest('/account/currentuser/', null, _constants2.default.CURRENT_USER_RECEIVED));
 		};
 	},
 
@@ -11621,7 +11631,8 @@ var store = void 0;
 exports.default = {
 	configureStore: function configureStore() {
 		var reducers = (0, _redux.combineReducers)({
-			post: _reducers.postReducer
+			post: _reducers.postReducer,
+			account: _reducers.accountReducer
 
 		});
 
@@ -32711,14 +32722,26 @@ var Posts = function (_Component) {
 	}, {
 		key: 'submitPost',
 		value: function submitPost(post) {
+			var user = this.props.account.user;
+
+			if (user == null) {
+				alert('Please sign up or log in to submit post!');
+				return;
+			}
+
+			post.profile = {
+				id: user.id,
+				username: user.username
+			};
+
 			var currentLocation = this.props.posts.currentLocation;
 
 			// latitude, longitude - mongo requirement for geospatial queries
-			post['geo'] = [currentLocation.lat, currentLocation.lng];
+			post.geo = [currentLocation.lat, currentLocation.lng];
 
 			this.props.createPost(post);
 
-			// console.log('submit post', JSON.stringify(post));
+			console.log('submit post', JSON.stringify(post));
 		}
 	}, {
 		key: 'render',
@@ -32750,7 +32773,8 @@ var Posts = function (_Component) {
 var mapStateToProps = function mapStateToProps(state) {
 
 	return {
-		posts: state.post
+		posts: state.post,
+		account: state.account
 	};
 };
 
@@ -33110,24 +33134,26 @@ exports.default = function () {
 
 	switch (action.type) {
 		case _constants2.default.FETCH_POSTS:
-
 			updated.list = action.payload;
 
 			return updated;
 
 		case _constants2.default.CREATE_POST:
-			console.log('CREATE_POST: ', JSON.stringify(action.payload));
+			var updatedList = updated.list == null ? [] : updatedList = Object.assign([], updated.list);
+
+			updatedList.unshift(action.payload);
+			updated.list = updatedList;
 
 			return updated;
 
 		case _constants2.default.CURRENT_LOCATION_CHANGED:
-
 			updated.currentLocation = action.location;
 			updated.list = null;
 
 			return updated;
 
 		default:
+
 			return updated;
 	}
 };
@@ -33158,6 +33184,11 @@ exports.default = {
 					return;
 				}
 
+				if (response.body.confirmation != 'success') {
+					reject(new Error(response.body.message));
+					return;
+				}
+
 				resolve(response.body);
 			});
 		});
@@ -33168,6 +33199,11 @@ exports.default = {
 			_superagent2.default.post(url).send(params).set('Accept', "application/json").end(function (err, response) {
 				if (err) {
 					reject(err);
+					return;
+				}
+
+				if (response.body.confirmation != 'success') {
+					reject(new Error(response.body.message));
 					return;
 				}
 
@@ -35474,20 +35510,49 @@ var Account = function (_Component) {
 	}
 
 	_createClass(Account, [{
+		key: 'componentDidMount',
+		value: function componentDidMount() {
+			// check current user
+			console.log("what is the current user?", this.props.account.user);
+
+			if (this.props.account.user != null) {
+				return;
+			}
+
+			this.props.checkCurrentUser();
+		}
+	}, {
 		key: 'register',
 		value: function register(registration) {
-			console.log('REGISTER', JSON.stringify(registration));
-
 			this.props.signup(registration);
+		}
+	}, {
+		key: 'login',
+		value: function login(credentials) {
+			this.props.login(credentials).then(function (response) {
+				console.log("thank you for logging in!");
+			}).catch(function (err) {
+				alert(err);
+			});
 		}
 	}, {
 		key: 'render',
 		value: function render() {
+			var account = this.props.account;
+
+
 			return _react2.default.createElement(
 				'div',
 				null,
 				'Account Container',
-				_react2.default.createElement(_view.Register, { onRegister: this.register.bind(this) })
+				account.user == null ? _react2.default.createElement(_view.Register, {
+					onRegister: this.register.bind(this),
+					onLogin: this.login.bind(this)
+				}) : _react2.default.createElement(
+					'h2',
+					null,
+					account.user.username
+				)
 			);
 		}
 	}]);
@@ -35497,7 +35562,9 @@ var Account = function (_Component) {
 
 var mapStateToProps = function mapStateToProps(state) {
 
-	return {};
+	return {
+		account: state.account
+	};
 };
 
 var mapDispatchToProps = function mapDispatchToProps(dispatch) {
@@ -35505,6 +35572,12 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 	return {
 		signup: function signup(params) {
 			return dispatch(_actions2.default.signup(params));
+		},
+		login: function login(params) {
+			return dispatch(_actions2.default.login(params));
+		},
+		checkCurrentUser: function checkCurrentUser() {
+			return dispatch(_actions2.default.checkCurrentUser());
 		}
 	};
 };
@@ -35584,20 +35657,39 @@ var Register = function (_Component) {
 			this.props.onRegister(this.state.registration);
 		}
 	}, {
+		key: 'submitLoginCredentials',
+		value: function submitLoginCredentials(e) {
+			e.preventDefault();
+
+			var registration = this.state.registration;
+
+			if (registration.username.length == 0) {
+				alert('Please enter a username');
+				return;
+			}
+
+			if (registration.password.length == 0) {
+				alert('Please enter a password');
+				return;
+			}
+
+			this.props.onLogin(this.state.registration);
+		}
+	}, {
 		key: 'render',
 		value: function render() {
 			return _react2.default.createElement(
 				'div',
 				null,
-				_react2.default.createElement(
-					'h2',
-					null,
-					'Sign up'
-				),
 				_react2.default.createElement('input', { onChange: this.updateRegistration.bind(this), id: 'username', type: 'text', placeholder: 'Username' }),
 				_react2.default.createElement('br', null),
 				_react2.default.createElement('input', { onChange: this.updateRegistration.bind(this), id: 'password', type: 'password', placeholder: 'Password' }),
 				_react2.default.createElement('br', null),
+				_react2.default.createElement(
+					'button',
+					{ onClick: this.submitLoginCredentials.bind(this) },
+					'Login'
+				),
 				_react2.default.createElement(
 					'button',
 					{ onClick: this.submitRegistration.bind(this) },
@@ -35641,8 +35733,10 @@ exports.default = function () {
 
 	switch (action.type) {
 		case _constants2.default.CURRENT_USER_RECEIVED:
-			updated['user'] = action.user;
 
+			updated['user'] = action.payload;
+
+			console.log("CURRENT_USER_RECEIVED", JSON.stringify(updated));
 			return updated;
 
 		default:

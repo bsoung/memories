@@ -9,8 +9,10 @@ export default (state=initialState, action) => {
 
 	switch (action.type) {
 		case constants.CURRENT_USER_RECEIVED:
-			updated['user'] = action.user;
-			
+
+			updated['user'] = action.payload;
+
+			console.log("CURRENT_USER_RECEIVED", JSON.stringify(updated));
 			return updated;
 
 		default:

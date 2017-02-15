@@ -17,17 +17,29 @@ class Posts extends Component {
 	}
 
 	submitPost(post) {
+		const user = this.props.account.user;
+
+		if (user == null) {
+			alert('Please sign up or log in to submit post!');
+			return;
+		}
+
+		post.profile = {
+			id: user.id,
+			username: user.username
+		}
+
 		const currentLocation = this.props.posts.currentLocation;
 
 		// latitude, longitude - mongo requirement for geospatial queries
-		post['geo'] = [
+		post.geo = [
 			currentLocation.lat,
 			currentLocation.lng
 		];
 
 		this.props.createPost(post);
 
-		// console.log('submit post', JSON.stringify(post));
+		console.log('submit post', JSON.stringify(post));
 	}
 
 	render() {
@@ -57,7 +69,8 @@ class Posts extends Component {
 const mapStateToProps = (state) => {
 
 	return {
-		posts: state.post
+		posts: state.post,
+		account: state.account
 	}
 }
 

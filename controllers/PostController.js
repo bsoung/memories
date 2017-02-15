@@ -4,6 +4,13 @@ module.exports = {
 
 	get: function(params, isRaw) {
 		return new Promise(function(resolve, reject) {
+			// check the params for lat and lng
+			if (params.lat != null && params.lng != null) {
+				// geo spatial query:
+				
+			}
+
+
 			Post.find(params, function(err, posts) {
 				if (err) {
 					reject(err);

@@ -14,24 +14,26 @@ export default (state=initialState, action) => {
 
 	switch (action.type) {
 		case constants.FETCH_POSTS:
-
 			updated.list = action.payload;
 
 			return updated;
 
 		case constants.CREATE_POST:
-			console.log('CREATE_POST: ', JSON.stringify(action.payload));
+			let updatedList = (updated.list == null) ? [] : updatedList = Object.assign([], updated.list);
+
+			updatedList.unshift(action.payload);
+			updated.list = updatedList;
 
 			return updated;
 
 		case constants.CURRENT_LOCATION_CHANGED:
-
 			updated.currentLocation = action.location;
 			updated.list = null;
 
 			return updated;
 
 		default:
+		
 			return updated;
 	}
 }

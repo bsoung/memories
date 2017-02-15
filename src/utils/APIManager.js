@@ -13,6 +13,11 @@ export default {
 						return;
 					}
 
+					if (response.body.confirmation != 'success') {
+						reject(new Error(response.body.message));
+						return;
+					}
+
 					resolve(response.body);
 				});
 		});
@@ -27,6 +32,11 @@ export default {
 				.end((err, response) => {
 					if (err) {
 						reject(err);
+						return;
+					}
+
+					if (response.body.confirmation != 'success') {
+						reject(new Error(response.body.message));
 						return;
 					}
 

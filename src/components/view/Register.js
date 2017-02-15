@@ -40,12 +40,30 @@ class Register extends Component {
 		this.props.onRegister(this.state.registration);
 	}
 
+	submitLoginCredentials(e) {
+		e.preventDefault();
+
+		let registration = this.state.registration;
+
+		if (registration.username.length == 0) {
+			alert('Please enter a username');
+			return;
+		}
+
+		if (registration.password.length == 0) {
+			alert('Please enter a password');
+			return;
+		}
+
+		this.props.onLogin(this.state.registration);
+	}
+
 	render() {
 		return (
 			<div>
-				<h2>Sign up</h2>
 				<input onChange={this.updateRegistration.bind(this)} id="username" type="text" placeholder="Username" /><br />
 				<input onChange={this.updateRegistration.bind(this)} id="password" type="password" placeholder="Password" /><br />
+				<button onClick={this.submitLoginCredentials.bind(this)}>Login</button>
 				<button onClick={this.submitRegistration.bind(this)}>Join</button>
 			</div>
 		)
