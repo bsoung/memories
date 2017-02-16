@@ -45,8 +45,6 @@ class Account extends Component {
 
 		return (
 			<div>
-				<div style={{marginBottom: 12}}>Current user</div>
-
 				{
 					(account.user) == null 
 					? <Register 
@@ -55,7 +53,7 @@ class Account extends Component {
 						/> 
 
 					: <div>
-						<h2>{account.user.username}</h2>
+						<h2>hello {account.user.username}.</h2>
 						<button className="button special small" onClick={this.logout.bind(this)}>Logout</button>
 					  </div>
 				}

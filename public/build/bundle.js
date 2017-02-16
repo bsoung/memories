@@ -35623,11 +35623,6 @@ var Account = function (_Component) {
 			return _react2.default.createElement(
 				'div',
 				null,
-				_react2.default.createElement(
-					'div',
-					{ style: { marginBottom: 12 } },
-					'Current user'
-				),
 				account.user == null ? _react2.default.createElement(_view.Register, {
 					onRegister: this.register.bind(this),
 					onLogin: this.login.bind(this)
@@ -35637,7 +35632,9 @@ var Account = function (_Component) {
 					_react2.default.createElement(
 						'h2',
 						null,
-						account.user.username
+						'hello ',
+						account.user.username,
+						'.'
 					),
 					_react2.default.createElement(
 						'button',

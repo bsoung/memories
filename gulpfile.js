@@ -35,6 +35,7 @@ gulp.task('js', function() {
 				'./public/assets/js/jquery.poptrox.min.js',
 				'./public/assets/js/skel.min.js',
 				'./public/assets/js/util.js',
+				'./public/assets/js/sweetalert.min.js',
 				'./public/assets/js/respond.min.js',
 				'./public/assets/js/main.js'
 			]
