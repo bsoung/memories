@@ -32710,13 +32710,17 @@ var Posts = function (_Component) {
 	_createClass(Posts, [{
 		key: 'componentDidMount',
 		value: function componentDidMount() {
-			this.props.fetchPosts(null);
+			var currentLocation = this.props.posts.currentLocation;
+
+			this.props.fetchPosts(currentLocation);
 		}
 	}, {
 		key: 'componentDidUpdate',
 		value: function componentDidUpdate() {
 			if (this.props.posts.list == null) {
-				this.props.fetchPosts(null);
+				var currentLocation = this.props.posts.currentLocation;
+
+				this.props.fetchPosts(currentLocation);
 			}
 		}
 	}, {
@@ -32740,8 +32744,6 @@ var Posts = function (_Component) {
 			post.geo = [currentLocation.lat, currentLocation.lng];
 
 			this.props.createPost(post);
-
-			console.log('submit post', JSON.stringify(post));
 		}
 	}, {
 		key: 'render',
@@ -32753,15 +32755,37 @@ var Posts = function (_Component) {
 				null,
 				_react2.default.createElement(_view.CreatePost, { onCreate: this.submitPost.bind(this) }),
 				_react2.default.createElement(
-					'ol',
-					null,
-					list == null ? null : list.map(function (p) {
-						return _react2.default.createElement(
-							'li',
-							{ key: p.id },
-							p.caption
-						);
-					})
+					'div',
+					{ className: 'table-wrapper' },
+					_react2.default.createElement(
+						'table',
+						{ className: 'alt' },
+						_react2.default.createElement(
+							'tbody',
+							null,
+							list == null ? null : list.map(function (p) {
+								return _react2.default.createElement(
+									'tr',
+									{ key: p.id },
+									_react2.default.createElement(
+										'td',
+										null,
+										_react2.default.createElement('img', { style: { width: 72 }, src: p.image })
+									),
+									_react2.default.createElement(
+										'td',
+										null,
+										p.caption
+									),
+									_react2.default.createElement(
+										'td',
+										null,
+										p.profile.username
+									)
+								);
+							})
+						)
+					)
 				)
 			);
 		}
@@ -32814,24 +32838,36 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 exports.default = function (props) {
 	return _react2.default.createElement(
 		'div',
-		{ className: 'container' },
+		null,
+		_react2.default.createElement(
+			'header',
+			{ id: 'header', style: { padding: 0, border: "2px solid darkgray" } },
+			_react2.default.createElement(
+				'div',
+				{ className: 'inner' },
+				_react2.default.createElement(_containers.MapNavigation, null)
+			)
+		),
 		_react2.default.createElement(
 			'div',
-			{ className: 'row' },
+			{ id: 'main' },
 			_react2.default.createElement(
-				'div',
-				{ className: 'col-md-3' },
-				_react2.default.createElement(_containers.MapNavigation, null)
-			),
-			_react2.default.createElement(
-				'div',
-				{ className: 'col-md-6' },
-				_react2.default.createElement(_containers.Posts, null)
-			),
-			_react2.default.createElement(
-				'div',
-				{ className: 'col-md-3' },
-				_react2.default.createElement(_containers.Account, null)
+				'section',
+				{ id: 'one' },
+				_react2.default.createElement(
+					'div',
+					{ className: 'row' },
+					_react2.default.createElement(
+						'div',
+						{ className: '9u 12u$(small)' },
+						_react2.default.createElement(_containers.Posts, null)
+					),
+					_react2.default.createElement(
+						'div',
+						{ className: '3u 12u$(small)' },
+						_react2.default.createElement(_containers.Account, null)
+					)
+				)
 			)
 		)
 	);
@@ -32966,27 +33002,46 @@ var CreatePost = function (_Component) {
 		value: function render() {
 			return _react2.default.createElement(
 				'div',
-				null,
+				{ style: { background: '#fff' } },
 				_react2.default.createElement(
-					'strong',
+					'h2',
 					null,
-					'Create Post'
-				),
-				_react2.default.createElement(
-					_reactDropzone2.default,
-					{ onDrop: this.imageSelected.bind(this), style: { border: 'none' } },
-					_react2.default.createElement(
-						'button',
-						null,
-						'Upload Image'
-					)
+					'Submit Memory'
 				),
 				_react2.default.createElement('input', { id: 'caption', onChange: this.updatePost.bind(this), type: 'text', placeholder: 'Caption' }),
 				_react2.default.createElement(
-					'button',
-					{ onClick: this.submitPost.bind(this) },
-					'Submit'
-				)
+					'div',
+					{ className: 'row' },
+					_react2.default.createElement(
+						'div',
+						{ className: '3u 12u$(small)' },
+						_react2.default.createElement(
+							_reactDropzone2.default,
+							{ onDrop: this.imageSelected.bind(this), style: { border: 'none', marginTop: 12 } },
+							_react2.default.createElement(
+								'button',
+								{ className: 'button special small' },
+								'Add Image'
+							)
+						)
+					),
+					_react2.default.createElement(
+						'div',
+						{ className: '3u 12u$(small)' },
+						_react2.default.createElement(
+							'button',
+							{ className: 'button special small', style: { marginTop: 12 }, onClick: this.submitPost.bind(this) },
+							'Submit'
+						)
+					),
+					_react2.default.createElement(
+						'div',
+						{ className: '6u 12u$(small)' },
+						_react2.default.createElement('img', { style: { width: 120, float: 'right', marginTop: 12 }, src: this.state.post.image })
+					)
+				),
+				_react2.default.createElement('br', null),
+				_react2.default.createElement('hr', null)
 			);
 		}
 	}]);
@@ -33065,7 +33120,7 @@ var Map = function (_Component) {
 					defaultZoom: this.props.zoom,
 					defaultCenter: this.props.center,
 					onDragend: this.mapDragged.bind(this),
-					options: { streetViewControl: false, mapTypeControl: false } })
+					options: { streetViewControl: false, mapTypeControl: false, scrollwheel: false } })
 			});
 		}
 	}]);
@@ -35544,7 +35599,11 @@ var Account = function (_Component) {
 			return _react2.default.createElement(
 				'div',
 				null,
-				'Account Container',
+				_react2.default.createElement(
+					'div',
+					{ style: { marginBottom: 12 } },
+					'Current user'
+				),
 				account.user == null ? _react2.default.createElement(_view.Register, {
 					onRegister: this.register.bind(this),
 					onLogin: this.login.bind(this)
@@ -35687,12 +35746,12 @@ var Register = function (_Component) {
 				_react2.default.createElement('br', null),
 				_react2.default.createElement(
 					'button',
-					{ onClick: this.submitLoginCredentials.bind(this) },
+					{ className: 'button special small', style: { marginBottom: 20 }, onClick: this.submitLoginCredentials.bind(this) },
 					'Login'
 				),
 				_react2.default.createElement(
 					'button',
-					{ onClick: this.submitRegistration.bind(this) },
+					{ className: 'button special small', onClick: this.submitRegistration.bind(this) },
 					'Join'
 				)
 			);

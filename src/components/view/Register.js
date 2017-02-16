@@ -63,8 +63,8 @@ class Register extends Component {
 			<div>
 				<input onChange={this.updateRegistration.bind(this)} id="username" type="text" placeholder="Username" /><br />
 				<input onChange={this.updateRegistration.bind(this)} id="password" type="password" placeholder="Password" /><br />
-				<button onClick={this.submitLoginCredentials.bind(this)}>Login</button>
-				<button onClick={this.submitRegistration.bind(this)}>Join</button>
+				<button className="button special small" style={{marginBottom: 20}} onClick={this.submitLoginCredentials.bind(this)}>Login</button>
+				<button className="button special small" onClick={this.submitRegistration.bind(this)}>Join</button>
 			</div>
 		)
 	}

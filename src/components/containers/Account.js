@@ -38,7 +38,8 @@ class Account extends Component {
 
 		return (
 			<div>
-				Account Container
+				<div style={{marginBottom: 12}}>Current user</div>
+
 				{
 					(account.user) == null 
 					? <Register 

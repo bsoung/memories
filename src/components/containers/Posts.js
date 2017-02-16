@@ -7,12 +7,16 @@ import { CreatePost } from '../view';
 class Posts extends Component {
 
 	componentDidMount() {
-		this.props.fetchPosts(null);
+		const currentLocation = this.props.posts.currentLocation;
+
+		this.props.fetchPosts(currentLocation);
 	}
 
 	componentDidUpdate() {
 		if (this.props.posts.list == null) {
-			this.props.fetchPosts(null);
+			const currentLocation = this.props.posts.currentLocation;
+
+			this.props.fetchPosts(currentLocation);
 		}
 	}
 
@@ -38,8 +42,6 @@ class Posts extends Component {
 		];
 
 		this.props.createPost(post);
-
-		console.log('submit post', JSON.stringify(post));
 	}
 
 	render() {
@@ -49,17 +51,27 @@ class Posts extends Component {
 			<div>
 				<CreatePost onCreate={this.submitPost.bind(this)} />
 
-				<ol>
-					{
-						(list == null) 
-						? null 
-						: list.map(p => {
-							return (
-								<li key={p.id}>{p.caption}</li>
-							)
-						})
-					}
-				</ol>
+				<div className="table-wrapper">
+					<table className="alt">
+						<tbody>
+							{
+								(list == null) 
+								? null 
+								: list.map(p => {
+									return (
+
+										<tr key={p.id}>
+											<td><img style={{width: 72}} src={p.image} /></td>
+											<td>{p.caption}</td>
+											<td>{p.profile.username}</td>
+										</tr>
+
+									)
+								})
+							}
+						</tbody>
+					</table>
+				</div>
 				
 			</div>
 		)

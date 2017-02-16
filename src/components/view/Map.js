@@ -36,7 +36,7 @@ class Map extends Component {
 						defaultZoom={this.props.zoom}
 						defaultCenter={this.props.center}
 						onDragend={this.mapDragged.bind(this)}
-						options={{streetViewControl: false, mapTypeControl: false}}>
+						options={{streetViewControl: false, mapTypeControl: false, scrollwheel: false}}>
 					</GoogleMap>
 				}
 			/>

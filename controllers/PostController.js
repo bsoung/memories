@@ -7,11 +7,25 @@ module.exports = {
 			// check the params for lat and lng
 			if (params.lat != null && params.lng != null) {
 				// geo spatial query:
-				
+				var range = 50/6371; // 6371 is radius of earth in km
+				params.geo = {
+					$near: [params.lat, params.lng],
+					$maxDistance: range
+				}
+
+				delete params.lat;
+				delete params.lng;
+				delete params.range;
 			}
 
+			// sort by timestamp
+			var filters = {
+				sort: {
+					timestamp: -1
+				}
+			}
 
-			Post.find(params, function(err, posts) {
+			Post.find(params, null, filters, function(err, posts) {
 				if (err) {
 					reject(err);
 					return;
