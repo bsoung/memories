@@ -3,3 +3,4 @@
 *.log
 mongodb
 .env
+.DS_Store
