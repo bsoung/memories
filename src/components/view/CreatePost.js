@@ -29,25 +29,37 @@ class CreatePost extends Component {
 	submitPost(e) {
 		e.preventDefault();
 		// console.log('Submit post', JSON.stringify(this.state.post));
+		let image = this.state.post.image;
+		let caption = this.state.post.caption;
 
-		if (this.state.post.image.length == 0) {
+		if (image.length == 0) {
 			alert('Please add an image!');
 
 			return;
 		}
 
-		if (this.state.post.caption.length == 0) {
+		if (caption.length == 0) {
 			alert('Please add a caption!');
 
 			return;
 		}
 
 		let updated = Object.assign({}, this.state.post);
+
 		this.props.onCreate(updated);
+
+		updated.caption = '';
+		updated.image = '';
+
+		this.setState({
+			post: updated
+		});
+
+
+
 	}
 
 	imageSelected(files) {
-		console.log('imageSelected');
 		const image = files[0];
 
 		// configure cloudinary api
@@ -86,6 +98,7 @@ class CreatePost extends Component {
 	}
 
 	render() {
+
 		return (
 			<div style={{background: '#fff'}}>
 				<h2>Submit Memory</h2>
@@ -105,7 +118,7 @@ class CreatePost extends Component {
 					</div>
 
 					<div className="6u 12u$(small)">
-						<img style={{width: 120, float: 'right', marginTop: 12}} src={this.state.post.image} />
+						<img id="image" style={{width: 120, float: 'right', marginTop: 12}} src={this.state.post.image} />
 					</div>
 				</div>
 

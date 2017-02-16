@@ -33,6 +33,13 @@ class Account extends Component {
 			})
 	}
 
+	logout(e) {
+		e.preventDefault();
+
+		this.props.logout();
+		console.log("logging out...")
+	}
+
 	render() {
 		const { account } = this.props;
 
@@ -46,7 +53,11 @@ class Account extends Component {
 						onRegister={this.register.bind(this)} 
 						onLogin={this.login.bind(this)}
 						/> 
-					: <h2>{account.user.username}</h2>
+
+					: <div>
+						<h2>{account.user.username}</h2>
+						<button className="button special small" onClick={this.logout.bind(this)}>Logout</button>
+					  </div>
 				}
 			</div>
 		)
@@ -65,6 +76,7 @@ const mapDispatchToProps = (dispatch) => {
 	return {
 		signup: (params) => dispatch(actions.signup(params)),
 		login: (params) => dispatch(actions.login(params)),
+		logout: () => dispatch(actions.logout()),
 		checkCurrentUser: () => dispatch(actions.checkCurrentUser())
 	}
 }

@@ -46,7 +46,8 @@ router.get('/:action', function(req, res, next) {
 		req.session.reset();
 
 		res.json({
-			confirmation: 'success'
+			confirmation: 'success',
+			user: null
 		});
 	}
 });

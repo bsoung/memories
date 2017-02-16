@@ -58,6 +58,12 @@ export default {
 		}
 	},
 
+	logout: () => {
+		return (dispatch) => {
+			return dispatch(getRequest('/account/logout', null, constants.CURRENT_USER_RECEIVED))
+		}
+	},
+
 	createPost: (params) => {
 		return (dispatch) => {
 			return dispatch(postRequest('/api/post', params, constants.CREATE_POST))
