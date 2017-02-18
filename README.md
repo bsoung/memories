@@ -25,7 +25,6 @@ Share and cherish those moments with yourself and other users by pinning them to
 * GET /account/logout    :: logs the current user out
 * POST /account/register    :: returns the newly registered user
 * POST /account/login    :: returns the authenticated user
-
 * GET /api/post   :: returns a list of all the posts
 * POST /api/post   :: returns a newly created post
 * GET /api/comment  :: returns a list of all the comments
@@ -38,7 +37,6 @@ Share and cherish those moments with yourself and other users by pinning them to
 * Run npm install, and then run webpack.
 * Make sure Gulp is installed, then run gulp.
 * Start nodemon, and switch over to localhost:3000.
-
 
 ### Contributers
 * bsoung
