@@ -19,6 +19,10 @@ Share and cherish those moments with yourself and other users by pinning them to
 * Gulp
 * Webpack / Babel
 
+## Wireframe
+
+![memories](http://i.imgur.com/O6FBSXH.png "Memories interface")
+
 ## API Reference
 
 * GET /account/currentuser    :: returns the current authenticated user
