@@ -29,7 +29,7 @@ class Account extends Component {
 				console.log("thank you for logging in!")
 			})
 			.catch(err => {
-				alert(err);
+				alert("Please check your login info and try again!");
 			})
 	}
 

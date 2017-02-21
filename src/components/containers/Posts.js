@@ -46,10 +46,16 @@ class Posts extends Component {
 
 	render() {
 		const list = this.props.posts.list; // can be null
+		const user = this.props.account.user;
 
 		return (
 			<div>
-				<CreatePost onCreate={this.submitPost.bind(this)} />
+				{
+					(user == null) 
+					? <div style={{marginBottom: 30}}>Please log in to post image</div>
+					:  <CreatePost onCreate={this.submitPost.bind(this)} />
+				}
+				
 
 				<div className="table-wrapper">
 					<table className="alt">
@@ -61,9 +67,9 @@ class Posts extends Component {
 									return (
 
 										<tr key={p.id}>
-											<td><img style={{width: 72}} src={p.image} /></td>
-											<td>{p.caption}</td>
-											<td>{p.profile.username}</td>
+												<td><a href={p.image} className="image"><img style={{width: 100}} src={p.image} /></a></td>
+												<td>{p.caption}</td>
+												<td>{p.profile.username}</td>
 										</tr>
 
 									)
@@ -77,6 +83,14 @@ class Posts extends Component {
 		)
 	}
 }
+
+/*
+							<article class="6u 12u$(xsmall) work-item">
+								<a href="images/fulls/01.jpg" class="image fit thumb"><img src="images/thumbs/01.jpg" alt="" /></a>
+								<h3>Magna sed consequat tempus</h3>
+								<p>Lorem ipsum dolor sit amet nisl sed nullam feugiat.</p>
+							</article>
+ */
 
 const mapStateToProps = (state) => {
 
