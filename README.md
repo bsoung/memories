@@ -46,16 +46,3 @@ Share and cherish those moments with yourself and other users by pinning them to
 * bsoung
 
 
-##### Directory layout
-
-```
-.
-├── client      Client-side code
-│   ├── assets  Timer Sound
-│   ├── js      JavaScript
-│   └── scss    SASS stylesheets
-├── server      Server-side code
-└── test        Tests
-    ├── client  Client tests
-    └── server  Server tests
-```
