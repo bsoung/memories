@@ -67,7 +67,7 @@ class Posts extends Component {
 									return (
 
 										<tr key={p.id}>
-												<td><a href={p.image} className="image"><img style={{width: 100}} src={p.image} /></a></td>
+												<td><a target="_blank" href={p.image} className="image"><img style={{width: 100}} src={p.image} /></a></td>
 												<td>{p.caption}</td>
 												<td>{p.profile.username}</td>
 										</tr>

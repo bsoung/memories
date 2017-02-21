@@ -35110,7 +35110,7 @@ var Posts = function (_Component) {
 										null,
 										_react2.default.createElement(
 											'a',
-											{ href: p.image, className: 'image' },
+											{ target: '_blank', href: p.image, className: 'image' },
 											_react2.default.createElement('img', { style: { width: 100 }, src: p.image })
 										)
 									),
