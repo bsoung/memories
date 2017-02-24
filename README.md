@@ -3,6 +3,8 @@
 The Big Apple is an endless labyrinth of good food, new people, and spectacular sights! 
 Share and cherish those moments with yourself and other users by pinning them to an interactive map.
 
+[Try it here!](https://memories-bs.herokuapp.com/)
+
 ## Motivation
 
 * A photo-sharing app with geo spatial queries. 
