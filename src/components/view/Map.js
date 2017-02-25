@@ -17,7 +17,7 @@ class Map extends Component {
 	}
 
 	render() {
-		const mapContainer = <div style={{minHeight: 800, height: '100%', width: '100%'}}></div>
+		const mapContainer = <div style={{minHeight: '100vw', height: '100%', width: '100%'}}></div>
 
 		return (
 			<GoogleMapLoader 
