@@ -63,7 +63,6 @@ export default {
 				}
 
 				const uploaded = response.body;	
-				console.log('UPLOAD COMPLETE: ', JSON.stringify(uploaded));
 
 				resolve(uploaded);
 			});
