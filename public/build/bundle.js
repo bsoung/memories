@@ -34968,7 +34968,7 @@ var Posts = function (_Component) {
 				null,
 				_react2.default.createElement(_view.Map, {
 					center: this.props.posts.currentLocation,
-					zoom: 14,
+					zoom: 15,
 					mapMoved: this.setNewLocation.bind(this)
 				})
 			);
@@ -35464,7 +35464,7 @@ var Map = function (_Component) {
 		value: function render() {
 			var _this2 = this;
 
-			var mapContainer = _react2.default.createElement('div', { style: { minHeight: 800, height: '100%', width: '100%' } });
+			var mapContainer = _react2.default.createElement('div', { style: { minHeight: '100vw', height: '100%', width: '100%' } });
 
 			return _react2.default.createElement(_reactGoogleMaps.GoogleMapLoader, {
 				containerElement: mapContainer,
@@ -35593,7 +35593,7 @@ var Register = function (_Component) {
 				_react2.default.createElement('br', null),
 				_react2.default.createElement(
 					'button',
-					{ className: 'button special small', style: { marginBottom: 20 }, onClick: this.submitLoginCredentials.bind(this) },
+					{ className: 'button special small', style: { marginBottom: 20, marginRight: 43 }, onClick: this.submitLoginCredentials.bind(this) },
 					'Login'
 				),
 				_react2.default.createElement(
@@ -35805,7 +35805,6 @@ exports.default = {
 				}
 
 				var uploaded = response.body;
-				console.log('UPLOAD COMPLETE: ', JSON.stringify(uploaded));
 
 				resolve(uploaded);
 			});

@@ -16,7 +16,7 @@ class Posts extends Component {
 			<div>
 				<Map 
 					center={this.props.posts.currentLocation} 
-					zoom={14} 
+					zoom={15} 
 					mapMoved={this.setNewLocation.bind(this)}
 				/>
 			</div>
