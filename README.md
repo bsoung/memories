@@ -5,7 +5,7 @@ Share and cherish those moments with yourself and other users by pinning them to
 
 [Try it here!](https://memories-bs.herokuapp.com/)
 
-Sometimes Heroku has a hiccup and it may affect this app. Check the their status if something is wrong by going here: https://status.heroku.com/
+Sometimes Heroku has a hiccup and it may affect this app. Check their status if something is wrong by going here: https://status.heroku.com/
 
 ## Motivation
 
